@@ -21,14 +21,17 @@ export function Nav() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const variant = scrolled ? 'light' : 'dark'
+  const wordmarkVariant = scrolled ? 'light' : 'dark'
+  // High contrast: on paper bg use graphite, on dark hero use paper
   const textColor = scrolled ? 'text-graphite' : 'text-paper'
 
   return (
     <>
       <motion.header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled ? 'bg-paper/95 backdrop-blur-sm border-b border-paper-soft shadow-sm' : 'bg-transparent'
+          scrolled
+            ? 'bg-paper/96 backdrop-blur-sm border-b border-paper-soft shadow-sm'
+            : 'bg-transparent'
         }`}
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -36,7 +39,7 @@ export function Nav() {
       >
         <div className="mx-auto px-6 md:px-12 lg:px-20 max-w-screen-2xl">
           <div className="flex items-center justify-between h-16 md:h-20">
-            <Wordmark variant={variant} />
+            <Wordmark variant={wordmarkVariant} />
 
             {/* Desktop nav */}
             <nav className="hidden md:flex items-center gap-8" aria-label="Hovednav">
@@ -44,7 +47,7 @@ export function Nav() {
                 <a
                   key={link.href}
                   href={link.href}
-                  className={`font-sans text-label uppercase tracking-widest transition-opacity duration-200 hover:opacity-60 ${textColor}`}
+                  className={`font-sans text-label uppercase tracking-widest transition-opacity duration-200 hover:opacity-50 ${textColor}`}
                 >
                   {link.label}
                 </a>
@@ -56,10 +59,12 @@ export function Nav() {
               onClick={() => setMobileOpen(!mobileOpen)}
               className={`md:hidden flex flex-col gap-1.5 p-2 ${textColor}`}
               aria-label={mobileOpen ? 'Lukk meny' : 'Åpne meny'}
+              aria-expanded={mobileOpen}
+              aria-controls="mobile-menu"
             >
-              <span className={`block w-6 h-px bg-current transition-all duration-300 ${mobileOpen ? 'rotate-45 translate-y-2' : ''}`} />
-              <span className={`block w-6 h-px bg-current transition-all duration-300 ${mobileOpen ? 'opacity-0' : ''}`} />
-              <span className={`block w-6 h-px bg-current transition-all duration-300 ${mobileOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+              <span className={`block w-6 h-px bg-current transition-all duration-300 ${mobileOpen ? 'rotate-45 translate-y-2' : ''}`} aria-hidden="true" />
+              <span className={`block w-6 h-px bg-current transition-all duration-300 ${mobileOpen ? 'opacity-0' : ''}`} aria-hidden="true" />
+              <span className={`block w-6 h-px bg-current transition-all duration-300 ${mobileOpen ? '-rotate-45 -translate-y-2' : ''}`} aria-hidden="true" />
             </button>
           </div>
         </div>
@@ -69,11 +74,14 @@ export function Nav() {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
+            id="mobile-menu"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="fixed inset-0 z-40 bg-graphite flex flex-col items-center justify-center"
+            role="dialog"
+            aria-label="Navigasjonsmeny"
           >
             <nav className="flex flex-col items-center gap-8">
               {links.map((link, i) => (

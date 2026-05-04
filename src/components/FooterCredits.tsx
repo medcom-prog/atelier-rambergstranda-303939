@@ -24,8 +24,8 @@ export function FooterCredits() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <Wordmark variant="light" className="mb-4" />
-            <p className="font-sans text-caption text-muted max-w-xs leading-relaxed">
+            <Wordmark variant="light" className="mb-5" />
+            <p className="font-sans text-sm text-graphite/70 max-w-xs leading-relaxed">
               Kunstnerbolig, workshops, festivaler og artist-in-residence på
               Norges vakreste strand. Et prosjekt av Galina Manikova.
             </p>
@@ -42,12 +42,12 @@ export function FooterCredits() {
             <p className="font-mono text-label text-muted uppercase tracking-widest mb-4">
               Sider
             </p>
-            <ul className="space-y-2">
+            <ul className="space-y-2.5" role="list">
               {navLinks.map((link) => (
                 <li key={link.href}>
                   <a
                     href={link.href}
-                    className="font-sans text-caption text-graphite hover:text-prussian transition-colors duration-200"
+                    className="font-sans text-sm text-graphite hover:text-prussian transition-colors duration-200"
                   >
                     {link.label}
                   </a>
@@ -66,10 +66,10 @@ export function FooterCredits() {
             <p className="font-mono text-label text-muted uppercase tracking-widest mb-4">
               Krediteringer
             </p>
-            <ul className="space-y-2">
-              <li className="font-sans text-caption text-muted">Foto: Knut-Ivar Johansen (drone)</li>
-              <li className="font-sans text-caption text-muted">Alternativ-prosess: Galina Manikova</li>
-              <li className="font-sans text-caption text-muted">Arkitekt: HOV + EGGE Arkitekter, Rakkestad</li>
+            <ul className="space-y-2" role="list">
+              <li className="font-sans text-sm text-graphite/70">Foto: Knut-Ivar Johansen</li>
+              <li className="font-sans text-sm text-graphite/70">Galina Manikova (alternativ-prosess)</li>
+              <li className="font-sans text-sm text-graphite/70">Arkitekt: HOV + EGGE Arkitekter</li>
             </ul>
           </motion.div>
 
@@ -80,7 +80,7 @@ export function FooterCredits() {
           <p className="font-mono text-label text-muted">
             © {new Date().getFullYear()} Atelier Rambergstranda · Ramberg, Lofoten
           </p>
-          <p className="font-mono text-label text-muted/50">
+          <p className="font-mono text-label text-muted">
             Flakstad kommune · gnr. 29 / bnr. 185
           </p>
         </div>

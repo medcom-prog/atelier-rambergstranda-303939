@@ -19,7 +19,7 @@ export function ContactMinimal() {
               Skriv til oss.
             </motion.h2>
             <motion.p
-              className="font-serif text-body-lg text-paper/60 mt-4 italic"
+              className="font-serif text-body-lg text-paper/80 mt-4 italic"
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
@@ -30,16 +30,16 @@ export function ContactMinimal() {
             </motion.p>
           </div>
 
-          {/* Contact info */}
+          {/* Contact info — high contrast */}
           <motion.address
-            className="not-italic space-y-6"
+            className="not-italic space-y-8"
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
           >
             <div>
-              <p className="font-mono text-label text-paper/40 uppercase tracking-widest mb-2">
+              <p className="font-mono text-label text-paper/60 uppercase tracking-widest mb-2">
                 E-post
               </p>
               <a
@@ -51,7 +51,7 @@ export function ContactMinimal() {
             </div>
 
             <div>
-              <p className="font-mono text-label text-paper/40 uppercase tracking-widest mb-2">
+              <p className="font-mono text-label text-paper/60 uppercase tracking-widest mb-2">
                 Telefon
               </p>
               <a
@@ -63,10 +63,10 @@ export function ContactMinimal() {
             </div>
 
             <div>
-              <p className="font-mono text-label text-paper/40 uppercase tracking-widest mb-2">
+              <p className="font-mono text-label text-paper/60 uppercase tracking-widest mb-2">
                 Adresse
               </p>
-              <p className="font-serif text-body text-paper/70">
+              <p className="font-serif text-body text-paper/85">
                 Galina Manikova<br />
                 Vestre Braarudgaten 2b<br />
                 3181 Horten
