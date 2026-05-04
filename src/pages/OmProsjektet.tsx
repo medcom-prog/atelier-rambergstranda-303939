@@ -13,12 +13,12 @@ const TECHNIQUES = [
 ];
 
 const FESTIVALER = [
-  { name: 'Boblefesten', year: 2015, img: '/images/boblefesten-04.jpg' },
-  { name: 'Boblefesten', year: 2017, img: '/images/boblefesten-07.jpg' },
+  { name: 'Boblefesten', year: 2015, img: '/images/boblefesten-04-v2.jpg' },
+  { name: 'Boblefesten', year: 2017, img: '/images/boblefesten-07-v2.jpg' },
   { name: 'Blås i det', year: 2017, img: '/images/blasidet-09.jpg' },
   { name: 'Blås i det', year: 2017, img: '/images/blasidet-23.jpg' },
   { name: 'Fat(t) det ufattelige', year: 2021, img: '/images/blasidet-29.jpg' },
-  { name: 'Fat(t) det ufattelige', year: 2021, img: '/images/blasidet-32.jpg' },
+  { name: 'Fat(t) det ufattelige', year: 2021, img: '/images/blasidet-32-v2.jpg' },
 ];
 
 const ANCHORS: ReadonlyArray<{ id: string; label: string }> = [
