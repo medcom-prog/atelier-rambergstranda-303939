@@ -44,20 +44,21 @@ export function SplitText({
         }
       `}</style>
       {words.map((w, i) => (
-        <span
-          key={i}
-          className={cn(
-            'inline-block will-change-transform',
-            italic.includes(i) && 'italic'
-          )}
-          style={{
-            opacity: 0,
-            transform: 'translateY(0.55em)',
-            animation: `split-text-rise 0.65s cubic-bezier(0.22, 1, 0.36, 1) ${delay + i * stagger}s forwards`,
-          }}
-        >
-          {w}
-          {i < words.length - 1 && (unit === 'line' ? <br /> : ' ')}
+        <span key={i} className="inline">
+          <span
+            className={cn(
+              'inline-block will-change-transform',
+              italic.includes(i) && 'italic'
+            )}
+            style={{
+              opacity: 0,
+              transform: 'translateY(0.55em)',
+              animation: `split-text-rise 0.65s cubic-bezier(0.22, 1, 0.36, 1) ${delay + i * stagger}s forwards`,
+            }}
+          >
+            {w}
+          </span>
+          {i < words.length - 1 ? (unit === 'line' ? <br /> : ' ') : null}
         </span>
       ))}
     </Tag>
