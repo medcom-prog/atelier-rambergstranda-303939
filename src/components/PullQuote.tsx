@@ -13,8 +13,9 @@ export function PullQuote() {
           <p className="font-serif text-display-xl text-paper italic leading-tight max-w-5xl">
             "Bebyggelsen vokser opp og ut av landskapet med ryggen mot fjellet og ansiktet mot havet."
           </p>
+          {/* text-paper/70 on graphite = sufficient contrast for small label */}
           <footer className="mt-8">
-            <cite className="font-mono text-label text-paper/40 uppercase tracking-widest not-italic">
+            <cite className="font-mono text-label text-paper/70 uppercase tracking-widest not-italic">
               HOV + EGGE Arkitekter · Visuelt konsept
             </cite>
           </footer>

@@ -18,7 +18,7 @@ export function CoursesCallout() {
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-16">
           <div>
             <motion.p
-              className="font-mono text-label text-paper/40 uppercase tracking-widest mb-6"
+              className="font-mono text-label text-paper/70 uppercase tracking-widest mb-6"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true, margin: '-60px' }}
@@ -38,7 +38,7 @@ export function CoursesCallout() {
               <em>glede — samhold</em>
             </motion.h2>
             <motion.p
-              className="font-serif text-body text-paper/50 italic mt-4 max-w-prose"
+              className="font-serif text-body text-paper/75 italic mt-4 max-w-prose"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
@@ -51,7 +51,7 @@ export function CoursesCallout() {
 
           <motion.a
             href="#kontakt"
-            className="inline-flex items-center gap-3 font-sans text-caption uppercase tracking-widest text-paper border border-paper/20 px-6 py-4 hover:bg-paper hover:text-graphite transition-all duration-300 self-start lg:self-end whitespace-nowrap"
+            className="inline-flex items-center gap-3 font-sans text-caption uppercase tracking-widest text-paper border border-paper/40 px-6 py-4 hover:bg-paper hover:text-graphite transition-all duration-300 self-start lg:self-end whitespace-nowrap"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -63,8 +63,8 @@ export function CoursesCallout() {
           </motion.a>
         </div>
 
-        {/* Technique grid — numbers, no icons */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-paper/8">
+        {/* Technique grid — numbers, no icons, 1px gap separator */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px" style={{ backgroundColor: 'rgba(244,241,236,0.10)' }}>
           {techniques.map((tech, i) => (
             <motion.div
               key={tech.id}
@@ -78,7 +78,8 @@ export function CoursesCallout() {
                 {tech.id}
               </p>
               <h3 className="font-serif text-xl text-paper mb-3 italic">{tech.name}</h3>
-              <p className="font-sans text-sm text-paper/55 leading-relaxed">{tech.desc}</p>
+              {/* text-paper/75 = ~4.5:1 on graphite bg — passes WCAG AA for body text */}
+              <p className="font-sans text-sm text-paper/75 leading-relaxed">{tech.desc}</p>
             </motion.div>
           ))}
         </div>
