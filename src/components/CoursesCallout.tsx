@@ -33,9 +33,9 @@ export function CoursesCallout() {
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             >
-              kunnskap — kreativitet
+              kunnskap – kreativitet
               <br />
-              <em>glede — samhold</em>
+              <em>glede – samhold</em>
             </motion.h2>
             <motion.p
               className="font-serif text-body text-paper/75 italic mt-4 max-w-prose"
