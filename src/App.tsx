@@ -10,21 +10,15 @@ import VisueltKonsept from '@/pages/VisueltKonsept';
 import Tomteanalyse from '@/pages/Tomteanalyse';
 import Tidslinje from '@/pages/Tidslinje';
 import Kontakt from '@/pages/Kontakt';
+import BetweenTwoTides from '@/pages/BetweenTwoTides';
+import Bestill from '@/pages/Bestill';
+import Butikk from '@/pages/Butikk';
 
-/**
- * Route-change scroll behavior:
- * - With a hash: smooth-scroll to the target after layout settles.
- * - Without a hash: snap to top *instantly* (the global smooth-scroll is
- *   removed in index.css so this is jump-to-top, not animated). Use
- *   useLayoutEffect so the snap happens before paint and the user never
- *   sees the previous page's scroll position carry over.
- */
 function ScrollManager() {
   const { pathname, hash, key } = useLocation();
 
   useLayoutEffect(() => {
     if (hash) {
-      // Defer one frame so the new page has rendered + IDs exist
       requestAnimationFrame(() => {
         const id = hash.replace('#', '');
         const el = document.getElementById(id);
@@ -39,7 +33,6 @@ function ScrollManager() {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   }, [pathname, hash, key]);
 
-  // Remove any browser-restored scroll position on first paint
   useEffect(() => {
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'manual';
@@ -49,7 +42,13 @@ function ScrollManager() {
   return null;
 }
 
-function Layout({ children, transparentNav = false }: { children: React.ReactNode; transparentNav?: boolean }) {
+function Layout({
+  children,
+  transparentNav = false,
+}: {
+  children: React.ReactNode;
+  transparentNav?: boolean;
+}) {
   return (
     <div className="bg-paper text-graphite antialiased min-h-screen">
       <ScrollProgress />
@@ -67,54 +66,15 @@ export default function App() {
     <BrowserRouter>
       <ScrollManager />
       <Routes>
-        <Route
-          path="/"
-          element={
-            <Layout transparentNav>
-              <Home />
-            </Layout>
-          }
-        />
-        <Route
-          path="/om-prosjektet"
-          element={
-            <Layout transparentNav>
-              <OmProsjektet />
-            </Layout>
-          }
-        />
-        <Route
-          path="/visuelt-konsept"
-          element={
-            <Layout transparentNav>
-              <VisueltKonsept />
-            </Layout>
-          }
-        />
-        <Route
-          path="/tomteanalyse"
-          element={
-            <Layout>
-              <Tomteanalyse />
-            </Layout>
-          }
-        />
-        <Route
-          path="/tidslinje"
-          element={
-            <Layout>
-              <Tidslinje />
-            </Layout>
-          }
-        />
-        <Route
-          path="/kontakt"
-          element={
-            <Layout>
-              <Kontakt />
-            </Layout>
-          }
-        />
+        <Route path="/" element={<Layout transparentNav><Home /></Layout>} />
+        <Route path="/om-prosjektet" element={<Layout transparentNav><OmProsjektet /></Layout>} />
+        <Route path="/between-two-tides" element={<Layout><BetweenTwoTides /></Layout>} />
+        <Route path="/visuelt-konsept" element={<Layout transparentNav><VisueltKonsept /></Layout>} />
+        <Route path="/tomteanalyse" element={<Layout><Tomteanalyse /></Layout>} />
+        <Route path="/tidslinje" element={<Layout><Tidslinje /></Layout>} />
+        <Route path="/butikk" element={<Layout><Butikk /></Layout>} />
+        <Route path="/bestill" element={<Layout><Bestill /></Layout>} />
+        <Route path="/kontakt" element={<Layout><Kontakt /></Layout>} />
         <Route
           path="*"
           element={

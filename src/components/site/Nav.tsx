@@ -4,46 +4,42 @@ import { Menu } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Logo } from './Logo';
+import { LanguageSwitcher } from './LanguageSwitcher';
+import { useT } from '@/i18n';
 import { cn } from '@/lib/utils';
-
-const ROUTES: ReadonlyArray<{ href: string; label: string }> = [
-  { href: '/', label: 'Hjem' },
-  { href: '/om-prosjektet', label: 'Om prosjektet' },
-  { href: '/visuelt-konsept', label: 'Visuelt konsept' },
-  { href: '/tomteanalyse', label: 'Tomteanalyse' },
-  { href: '/tidslinje', label: 'Tidslinje' },
-  { href: '/kontakt', label: 'Kontakt' },
-];
 
 interface NavProps {
   variant?: 'transparent' | 'solid';
 }
 
-/**
- * Sticky top navigation. Becomes opaque on scroll past hero.
- * Hides when scrolling down past 240px, reveals again on scroll up
- * (better mobile reading experience). Mobile menu via Radix Sheet.
- */
 export function Nav({ variant = 'solid' }: NavProps) {
+  const t = useT();
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
   const lastY = useRef(0);
   const location = useLocation();
 
+  const ROUTES = [
+    { href: '/', label: t.nav.home },
+    { href: '/om-prosjektet', label: t.nav.about },
+    { href: '/between-two-tides', label: t.nav.betweenTides },
+    { href: '/visuelt-konsept', label: t.nav.visualConcept },
+    { href: '/tidslinje', label: t.nav.timeline },
+    { href: '/butikk', label: t.nav.shop },
+    { href: '/bestill', label: t.nav.booking },
+    { href: '/kontakt', label: t.nav.contact },
+  ];
+
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY;
       setScrolled(y > 24);
-
       const dy = y - lastY.current;
-      // Only react past the fold and only if delta is significant
       if (y > 240 && Math.abs(dy) > 6) {
         if (dy > 0) {
-          // scrolling down — hide
           setHidden(true);
         } else {
-          // scrolling up — reveal
           setHidden(false);
         }
       } else if (y <= 240) {
@@ -56,12 +52,14 @@ export function Nav({ variant = 'solid' }: NavProps) {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // close mobile sheet on route change
   useEffect(() => {
     setOpen(false);
   }, [location.pathname]);
 
   const isOnPaper = variant === 'solid' || scrolled;
+
+  // Top-level desktop nav: keep it tight to 5 routes (skip Hjem in the bar; logo is the home link)
+  const desktopRoutes = ROUTES.filter((r) => r.href !== '/');
 
   return (
     <motion.header
@@ -75,7 +73,7 @@ export function Nav({ variant = 'solid' }: NavProps) {
       )}
     >
       <div className="mx-auto max-w-screen-2xl px-6 md:px-10 lg:px-14">
-        <div className="flex items-center justify-between h-16 md:h-20">
+        <div className="flex items-center justify-between h-16 md:h-20 gap-6">
           <Logo
             size="md"
             tone={isOnPaper ? 'graphite' : 'paper'}
@@ -84,10 +82,10 @@ export function Nav({ variant = 'solid' }: NavProps) {
 
           {/* Desktop nav */}
           <nav
-            aria-label="Hovedmeny"
-            className="hidden lg:flex items-center gap-8"
+            aria-label={t.nav.home}
+            className="hidden lg:flex items-center gap-7 xl:gap-8"
           >
-            {ROUTES.slice(1).map((r) => (
+            {desktopRoutes.map((r) => (
               <NavLink
                 key={r.href}
                 to={r.href}
@@ -123,68 +121,74 @@ export function Nav({ variant = 'solid' }: NavProps) {
                 )}
               </NavLink>
             ))}
+            <span aria-hidden="true" className={cn('h-3 w-px', isOnPaper ? 'bg-graphite/20' : 'bg-paper/30')} />
+            <LanguageSwitcher tone={isOnPaper ? 'graphite' : 'paper'} />
           </nav>
 
-          {/* Mobile trigger */}
-          <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger
-              aria-label="Åpne meny"
-              className={cn(
-                'lg:hidden inline-flex items-center justify-center h-11 w-11 -mr-2 transition-colors',
-                isOnPaper ? 'text-graphite' : 'text-paper'
-              )}
-            >
-              <Menu className="h-5 w-5" strokeWidth={1.5} />
-            </SheetTrigger>
-            <SheetContent side="right" className="bg-paper text-graphite flex flex-col p-7 sm:p-9 max-w-sm">
-              <div className="mb-8">
-                <Logo size="md" tone="graphite" />
-              </div>
-              <nav className="flex flex-col gap-1" aria-label="Mobilmeny">
-                {ROUTES.map((r, i) => (
-                  <motion.div
-                    key={r.href}
-                    initial={{ opacity: 0, x: 12 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{
-                      duration: 0.4,
-                      delay: 0.06 + i * 0.04,
-                      ease: [0.22, 1, 0.36, 1],
-                    }}
-                  >
-                    <Link
-                      to={r.href}
-                      className={cn(
-                        'block font-serif text-3xl py-3 transition-colors',
-                        location.pathname === r.href
-                          ? 'text-graphite'
-                          : 'text-graphite/55 hover:text-graphite'
-                      )}
+          {/* Mobile cluster: language + hamburger */}
+          <div className="flex items-center gap-3 lg:hidden">
+            <LanguageSwitcher tone={isOnPaper ? 'graphite' : 'paper'} />
+            <Sheet open={open} onOpenChange={setOpen}>
+              <SheetTrigger
+                aria-label={t.nav.home}
+                className={cn(
+                  'inline-flex items-center justify-center h-11 w-11 -mr-2 transition-colors',
+                  isOnPaper ? 'text-graphite' : 'text-paper'
+                )}
+              >
+                <Menu className="h-5 w-5" strokeWidth={1.5} />
+              </SheetTrigger>
+              <SheetContent side="right" className="bg-paper text-graphite flex flex-col p-7 sm:p-9 max-w-sm">
+                <div className="mb-8 flex items-start justify-between gap-4">
+                  <Logo size="md" tone="graphite" />
+                  <LanguageSwitcher tone="graphite" />
+                </div>
+                <nav className="flex flex-col gap-1" aria-label={t.nav.home}>
+                  {ROUTES.map((r, i) => (
+                    <motion.div
+                      key={r.href}
+                      initial={{ opacity: 0, x: 12 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{
+                        duration: 0.4,
+                        delay: 0.06 + i * 0.04,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
                     >
-                      {r.label}
-                    </Link>
-                  </motion.div>
-                ))}
-              </nav>
-              <div className="mt-auto pt-10 border-t border-graphite/15">
-                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
-                  Galina Manikova
-                </p>
-                <a
-                  href="mailto:galina@galina.no"
-                  className="block mt-2 font-serif text-base text-graphite hover:text-prussian transition-colors"
-                >
-                  galina@galina.no
-                </a>
-                <a
-                  href="tel:+4790017522"
-                  className="block mt-1 font-serif text-base text-graphite hover:text-prussian transition-colors"
-                >
-                  +47 90 01 75 22
-                </a>
-              </div>
-            </SheetContent>
-          </Sheet>
+                      <Link
+                        to={r.href}
+                        className={cn(
+                          'block font-serif text-2xl md:text-3xl py-2.5 transition-colors',
+                          location.pathname === r.href
+                            ? 'text-graphite'
+                            : 'text-graphite/55 hover:text-graphite'
+                        )}
+                      >
+                        {r.label}
+                      </Link>
+                    </motion.div>
+                  ))}
+                </nav>
+                <div className="mt-auto pt-10 border-t border-graphite/15">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
+                    Galina Manikova
+                  </p>
+                  <a
+                    href="mailto:galina@galina.no"
+                    className="block mt-2 font-serif text-base text-graphite hover:text-prussian transition-colors"
+                  >
+                    galina@galina.no
+                  </a>
+                  <a
+                    href="tel:+4790017522"
+                    className="block mt-1 font-serif text-base text-graphite hover:text-prussian transition-colors"
+                  >
+                    +47 90 01 75 22
+                  </a>
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
       </div>
     </motion.header>
