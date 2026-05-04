@@ -1,5 +1,6 @@
-import { motion, type Variants } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import type { JSX } from 'react';
 
 interface SplitTextProps {
   children: string;
@@ -15,29 +16,11 @@ interface SplitTextProps {
   italic?: number[];
 }
 
-const wordVariants: Variants = {
-  hidden: { opacity: 0, y: '0.55em' },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] },
-  },
-};
-
-// Static map — defining motion components OUTSIDE of render avoids
-// the new-component-each-render problem that breaks framer's variant
-// orchestration (children stay stuck in the hidden state).
-const motionTags = {
-  h1: motion.h1,
-  h2: motion.h2,
-  h3: motion.h3,
-  p: motion.p,
-};
-
 /**
  * Editorial word-by-word reveal — slow rise + fade, like a magazine title
- * being typeset. The wrapping motion element IS the heading tag, so the
- * staggerChildren orchestration cascades directly to each word.
+ * being typeset. Uses per-word initial/animate with computed delays
+ * (no variants orchestration — that proved unreliable across page
+ * mount + PageTransition wrapping in this app).
  */
 export function SplitText({
   children,
@@ -51,32 +34,29 @@ export function SplitText({
   const words: string[] =
     unit === 'line' ? children.split('\n') : children.trim().split(/\s+/);
 
-  const containerVariants: Variants = {
-    hidden: {},
-    visible: {
-      transition: { staggerChildren: stagger, delayChildren: delay },
-    },
-  };
-
-  const MotionTag = motionTags[as];
+  const Tag = as as keyof JSX.IntrinsicElements;
 
   return (
-    <MotionTag
-      initial="hidden"
-      animate="visible"
-      variants={containerVariants}
-      className={cn(className)}
-    >
+    <Tag className={cn(className)}>
       {words.map((w, i) => (
         <motion.span
           key={i}
-          variants={wordVariants}
-          className={cn('inline-block will-change-transform', italic.includes(i) && 'italic')}
+          initial={{ opacity: 0, y: '0.55em' }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.65,
+            delay: delay + i * stagger,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          className={cn(
+            'inline-block will-change-transform',
+            italic.includes(i) && 'italic'
+          )}
         >
           {w}
           {i < words.length - 1 && (unit === 'line' ? <br /> : ' ')}
         </motion.span>
       ))}
-    </MotionTag>
+    </Tag>
   );
 }
