@@ -1,31 +1,58 @@
-/**
- * App — composes sections in the order the agent sets in site.config.
- * The agent-runner will overwrite this file during Phase 3 to import
- * only the sections it composed, in the chosen order.
- *
- * This default renders a "site is being built" placeholder so a
- * freshly-created repo never looks broken while the agent works.
- */
-import { site } from './site.config';
+import { Nav } from './components/Nav'
+import { HeroCyanotype } from './components/HeroCyanotype'
+import { Epigraph } from './components/Epigraph'
+import { VisionProse } from './components/VisionProse'
+import { PullQuote } from './components/PullQuote'
+import { ImageGridAerial } from './components/ImageGridAerial'
+import { ArchitectureSplit } from './components/ArchitectureSplit'
+import { CoursesCallout } from './components/CoursesCallout'
+import { FestivalsEssay } from './components/FestivalsEssay'
+import { ResidencyBlock } from './components/ResidencyBlock'
+import { TimelineStrata } from './components/TimelineStrata'
+import { ContactMinimal } from './components/ContactMinimal'
+import { FooterCredits } from './components/FooterCredits'
 
 export default function App() {
   return (
-    <main className="min-h-screen flex items-center justify-center p-8">
-      <div className="max-w-xl text-center">
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-ink-400 mb-4">
-          Medcom Site Shell
-        </p>
-        <h1 className="font-display text-4xl md:text-5xl text-ink-900 mb-4">
-          Siden bygges nå.
-        </h1>
-        <p className="text-ink-500 leading-relaxed">
-          {site.company.name} er i ferd med å få en ny nettside. Agenten kommer
-          til å bytte ut denne siden med det ferdige resultatet innen kort tid.
-        </p>
-        <p className="mt-8 font-mono text-xs text-ink-400">
-          Industri: {site.company.industry}
-        </p>
-      </div>
-    </main>
-  );
+    <div className="bg-paper text-graphite antialiased">
+      {/* 1. Thin navigation — transparent over hero */}
+      <Nav />
+
+      {/* 2. Full-bleed cyanotype hero (THE WEIRD THING) */}
+      <HeroCyanotype />
+
+      {/* 3. Helen Keller epigraph */}
+      <Epigraph />
+
+      {/* 4. Long-form vision prose */}
+      <VisionProse />
+
+      {/* 5. Pull-quote — dark section */}
+      <PullQuote />
+
+      {/* 6. Aerial drone image grid */}
+      <ImageGridAerial />
+
+      {/* 7. Architecture image-text pair */}
+      <ArchitectureSplit />
+
+      {/* 8. Courses callout — dark section */}
+      <CoursesCallout />
+
+      {/* 9. Festivals photo essay */}
+      <FestivalsEssay />
+
+      {/* 10. Residency text block */}
+      <ResidencyBlock />
+
+      {/* 11. Timeline as geological strata */}
+      <TimelineStrata />
+
+      {/* 12. Contact minimal */}
+      <ContactMinimal />
+
+      {/* 13. Footer credits */}
+      <FooterCredits />
+    </div>
+  )
 }
