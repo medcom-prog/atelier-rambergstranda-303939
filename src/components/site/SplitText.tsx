@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import type { JSX } from 'react';
 
@@ -17,10 +16,10 @@ interface SplitTextProps {
 }
 
 /**
- * Editorial word-by-word reveal — slow rise + fade, like a magazine title
- * being typeset. Uses per-word initial/animate with computed delays
- * (no variants orchestration — that proved unreliable across page
- * mount + PageTransition wrapping in this app).
+ * Editorial word-by-word reveal — slow rise + fade. Implemented with
+ * pure CSS keyframes (no framer-motion) because nested motion contexts
+ * with PageTransition kept blocking the on-mount animation. CSS
+ * animations fire on element insertion regardless of parent state.
  */
 export function SplitText({
   children,
@@ -38,24 +37,28 @@ export function SplitText({
 
   return (
     <Tag className={cn(className)}>
+      <style>{`
+        @keyframes split-text-rise {
+          from { opacity: 0; transform: translateY(0.55em); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
       {words.map((w, i) => (
-        <motion.span
+        <span
           key={i}
-          initial={{ opacity: 0, y: '0.55em' }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 0.65,
-            delay: delay + i * stagger,
-            ease: [0.22, 1, 0.36, 1],
-          }}
           className={cn(
             'inline-block will-change-transform',
             italic.includes(i) && 'italic'
           )}
+          style={{
+            opacity: 0,
+            transform: 'translateY(0.55em)',
+            animation: `split-text-rise 0.65s cubic-bezier(0.22, 1, 0.36, 1) ${delay + i * stagger}s forwards`,
+          }}
         >
           {w}
           {i < words.length - 1 && (unit === 'line' ? <br /> : ' ')}
-        </motion.span>
+        </span>
       ))}
     </Tag>
   );
