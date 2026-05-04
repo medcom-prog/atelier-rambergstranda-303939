@@ -24,6 +24,16 @@ const wordVariants: Variants = {
   },
 };
 
+// Static map — defining motion components OUTSIDE of render avoids
+// the new-component-each-render problem that breaks framer's variant
+// orchestration (children stay stuck in the hidden state).
+const motionTags = {
+  h1: motion.h1,
+  h2: motion.h2,
+  h3: motion.h3,
+  p: motion.p,
+};
+
 /**
  * Editorial word-by-word reveal — slow rise + fade, like a magazine title
  * being typeset. The wrapping motion element IS the heading tag, so the
@@ -38,7 +48,6 @@ export function SplitText({
   as = 'h1',
   italic = [],
 }: SplitTextProps) {
-  // Split content into renderable parts
   const words: string[] =
     unit === 'line' ? children.split('\n') : children.trim().split(/\s+/);
 
@@ -49,8 +58,7 @@ export function SplitText({
     },
   };
 
-  // motion.[h1|h2|h3|p] picked dynamically
-  const MotionTag = (motion as any)[as] as React.ComponentType<any>;
+  const MotionTag = motionTags[as];
 
   return (
     <MotionTag
@@ -66,7 +74,7 @@ export function SplitText({
           className={cn('inline-block will-change-transform', italic.includes(i) && 'italic')}
         >
           {w}
-          {i < words.length - 1 && (unit === 'line' ? <br /> : ' ')}
+          {i < words.length - 1 && (unit === 'line' ? <br /> : ' ')}
         </motion.span>
       ))}
     </MotionTag>
