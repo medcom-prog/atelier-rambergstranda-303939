@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Container } from '@/components/site/Container';
 import { Eyebrow } from '@/components/site/Eyebrow';
+import { SplitText } from '@/components/site/SplitText';
 
 interface Event {
   year: string;
@@ -94,13 +95,25 @@ export default function Tidslinje() {
       <section className="bg-paper pt-32 md:pt-40 pb-16 md:pb-24">
         <Container size="lg">
           <Eyebrow number="—">Tidslinje</Eyebrow>
-          <h1 className="font-serif text-display-lg md:text-display-xl text-graphite leading-[1.02] max-w-4xl">
-            Et tiår fra <em>visjon til vedtak.</em>
-          </h1>
-          <p className="mt-8 font-serif text-body-lg text-graphite/70 max-w-prose-lg leading-relaxed">
+          <SplitText
+            as="h1"
+            unit="word"
+            stagger={0.085}
+            delay={0.15}
+            italic={[3, 4]}
+            className="font-serif text-display-lg md:text-display-xl text-graphite leading-[1.02] max-w-4xl"
+          >
+            {'Et tiår fra visjon til vedtak.'}
+          </SplitText>
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 1.0, ease: 'easeOut' }}
+            className="mt-8 font-serif text-body-lg text-graphite/70 max-w-prose-lg leading-relaxed"
+          >
             Fra de første festivalene i 2015, gjennom fem høringsrunder og endelig
             reguleringsvedtak i mars 2020 — en gjennomgang av prosjektets viktigste milepæler.
-          </p>
+          </motion.p>
         </Container>
       </section>
 
@@ -119,13 +132,17 @@ export default function Tidslinje() {
                 key={`${e.year}-${e.date ?? i}`}
                 initial={{ opacity: 0, x: -8 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: '-30px' }}
-                transition={{ duration: 0.5, delay: (i % 6) * 0.04, ease: [0.22, 1, 0.36, 1] }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.6, delay: (i % 5) * 0.05, ease: [0.22, 1, 0.36, 1] }}
                 className="relative pl-12 md:pl-16 pb-14 md:pb-18 last:pb-0"
               >
                 {/* Marker */}
-                <span
+                <motion.span
                   aria-hidden="true"
+                  initial={{ scale: 0 }}
+                  whileInView={{ scale: 1 }}
+                  viewport={{ once: true, margin: '-60px' }}
+                  transition={{ duration: 0.5, delay: 0.15 + (i % 5) * 0.05, ease: [0.22, 1, 0.36, 1] }}
                   className={`absolute left-0 top-1.5 inline-block h-3.5 w-3.5 md:h-[22px] md:w-[22px] rounded-full ${typeColor[e.type]} ring-4 ring-paper`}
                 />
 

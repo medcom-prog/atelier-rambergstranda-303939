@@ -2,6 +2,8 @@ import { motion } from 'framer-motion';
 import { Container } from '@/components/site/Container';
 import { Eyebrow } from '@/components/site/Eyebrow';
 import { Pullquote } from '@/components/site/Pullquote';
+import { CountUp } from '@/components/site/CountUp';
+import { SplitText } from '@/components/site/SplitText';
 
 const TECHNIQUES = [
   { id: '01', name: 'Cyanotype', body: 'Lysfølsomhetens grunnprosess. Papir, stoff, glass, tre, keramikk.' },
@@ -32,23 +34,31 @@ const ANCHORS: ReadonlyArray<{ id: string; label: string }> = [
 export default function OmProsjektet() {
   return (
     <>
-      {/* Hero — architectural rendering */}
+      {/* Hero — architectural rendering with subtle parallax-on-scroll */}
       <section className="relative h-[78vh] min-h-[560px] overflow-hidden bg-graphite">
-        <img
+        <motion.img
           src="/images/slide-ny-tegning.jpg"
           alt="Arkitektonisk skisse av kunstnerboligen integrert i Lofoten-landskapet"
           className="absolute inset-0 w-full h-full object-cover"
           loading="eager"
+          initial={{ scale: 1.08 }}
+          animate={{ scale: 1.0 }}
+          transition={{ duration: 2.4, ease: [0.22, 1, 0.36, 1] }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-graphite/30 via-transparent to-graphite/65" />
         <div className="absolute inset-x-0 bottom-0 px-6 md:px-12 lg:px-16 pb-12 md:pb-16">
           <Container size="xl" className="!px-0">
             <Eyebrow tone="paper" number="01">Om prosjektet</Eyebrow>
-            <h1 className="font-serif text-display-md md:text-display-lg text-paper max-w-3xl leading-[1.05]">
-              Et hovedbygg ved sjøen.
-              <br />
-              <em>Ti til tolv minihus på fjellsiden.</em>
-            </h1>
+            <SplitText
+              as="h1"
+              unit="word"
+              stagger={0.075}
+              delay={0.25}
+              italic={[3, 4, 5, 6, 7, 8]}
+              className="font-serif text-display-md md:text-display-lg text-paper max-w-3xl leading-[1.05]"
+            >
+              {'Et hovedbygg ved sjøen. Ti til tolv minihus på fjellsiden.'}
+            </SplitText>
           </Container>
         </div>
       </section>
@@ -61,7 +71,7 @@ export default function OmProsjektet() {
       {/* Section anchors TOC (sticky on desktop) */}
       <section className="bg-paper border-t border-graphite/10 sticky top-16 md:top-20 z-30 backdrop-blur-md bg-paper/85">
         <Container size="xl">
-          <nav aria-label="Innhold" className="flex gap-1 md:gap-3 overflow-x-auto py-4 -mx-2 px-2">
+          <nav aria-label="Innhold" className="flex gap-1 md:gap-3 overflow-x-auto no-scrollbar py-4 -mx-2 px-2">
             {ANCHORS.map((a) => (
               <a
                 key={a.id}
@@ -80,7 +90,13 @@ export default function OmProsjektet() {
         <Container size="lg">
           <Eyebrow number="(01)">Visjonen</Eyebrow>
           <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
-            <div className="md:col-span-7 prose-editorial space-y-6">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-80px' }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              className="md:col-span-7 prose-editorial space-y-6"
+            >
               <p>
                 På sjøsiden av eiendom gnr. 29 / bnr. 185 er planen å bygge en moderne bygning
                 som kan bli en base for den nye kunstarenaen. I tillegg til å kunne brukes som
@@ -102,32 +118,69 @@ export default function OmProsjektet() {
                 kan være til inspirasjon for andre. Det vil bli lagt stor vekt på bruk av
                 kortreist materiale og energiøkonomiske løsninger.
               </p>
-            </div>
+            </motion.div>
             <aside className="md:col-span-5 md:pt-2">
               <dl className="border-l border-graphite/15 pl-6 md:pl-8 space-y-8">
-                {[
-                  ['10–12', 'Minihus på fjellsiden'],
-                  ['5', 'Høringsrunder · endelig godkjent mars 2020'],
-                  ['2015', 'Prosjektet startet'],
-                  ['Lofoten', 'Flakstad kommune'],
-                ].map(([k, v]) => (
-                  <div key={String(v)}>
-                    <dt className="font-serif text-3xl md:text-4xl text-prussian leading-none">
-                      {k}
-                    </dt>
-                    <dd className="mt-2 font-mono text-[10px] uppercase tracking-[0.22em] text-graphite/60">
-                      {v}
-                    </dd>
-                  </div>
-                ))}
+                <motion.div
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: '-60px' }}
+                  transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <dt className="font-serif text-3xl md:text-4xl text-prussian leading-none">
+                    <CountUp to={10} duration={1.5} />–<CountUp to={12} duration={1.7} />
+                  </dt>
+                  <dd className="mt-2 font-mono text-[10px] uppercase tracking-[0.22em] text-graphite/60">
+                    Minihus på fjellsiden
+                  </dd>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: '-60px' }}
+                  transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <dt className="font-serif text-3xl md:text-4xl text-prussian leading-none">
+                    <CountUp to={5} duration={1.4} />
+                  </dt>
+                  <dd className="mt-2 font-mono text-[10px] uppercase tracking-[0.22em] text-graphite/60">
+                    Høringsrunder · endelig godkjent mars 2020
+                  </dd>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: '-60px' }}
+                  transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <dt className="font-serif text-3xl md:text-4xl text-prussian leading-none">
+                    <CountUp from={2010} to={2015} duration={1.6} />
+                  </dt>
+                  <dd className="mt-2 font-mono text-[10px] uppercase tracking-[0.22em] text-graphite/60">
+                    Prosjektet startet
+                  </dd>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: '-60px' }}
+                  transition={{ duration: 0.7, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <dt className="font-serif text-3xl md:text-4xl text-prussian leading-none">
+                    Lofoten
+                  </dt>
+                  <dd className="mt-2 font-mono text-[10px] uppercase tracking-[0.22em] text-graphite/60">
+                    Flakstad kommune
+                  </dd>
+                </motion.div>
               </dl>
             </aside>
           </div>
 
-          {/* Drone gallery */}
+          {/* Drone gallery with hover dim */}
           <div className="mt-20 md:mt-28">
             <Eyebrow number="—">Luftfoto · Knut-Ivar Johansen</Eyebrow>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-px bg-graphite/10">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-px bg-graphite/10 group/gallery">
               {[
                 'drone-DJI_0541',
                 'drone-DJI_0552',
@@ -138,17 +191,17 @@ export default function OmProsjektet() {
               ].map((id, i) => (
                 <motion.figure
                   key={id}
-                  initial={{ opacity: 0, y: 12 }}
+                  initial={{ opacity: 0, y: 16 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-60px' }}
-                  transition={{ duration: 0.55, delay: (i % 3) * 0.05, ease: [0.22, 1, 0.36, 1] }}
-                  className="relative aspect-[16/10] overflow-hidden bg-paper"
+                  viewport={{ once: true, margin: '-80px' }}
+                  transition={{ duration: 0.65, delay: (i % 3) * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                  className="relative aspect-[16/10] overflow-hidden bg-paper transition-opacity duration-500 group-hover/gallery:opacity-55 hover:!opacity-100"
                 >
                   <img
                     src={`/images/${id}.jpg`}
                     alt={`Rambergstranda fra luften — ${id}`}
                     loading="lazy"
-                    className="w-full h-full object-cover transition-transform duration-700 hover:scale-[1.03]"
+                    className="w-full h-full object-cover transition-transform duration-1000 ease-out hover:scale-[1.04]"
                   />
                 </motion.figure>
               ))}
@@ -233,13 +286,13 @@ export default function OmProsjektet() {
             {TECHNIQUES.map((t, i) => (
               <motion.div
                 key={t.id}
-                initial={{ opacity: 0, y: 16 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.5, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
-                className="bg-graphite p-10 md:p-12"
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.6, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
+                className="bg-graphite p-10 md:p-12 group/tech transition-colors duration-500 hover:bg-graphite-soft"
               >
-                <p className="font-mono text-3xl md:text-4xl text-prussian font-light leading-none">
+                <p className="font-mono text-3xl md:text-4xl text-prussian font-light leading-none transition-colors duration-500 group-hover/tech:text-paper/85">
                   {t.id}
                 </p>
                 <h3 className="mt-7 font-serif text-2xl text-paper italic">{t.name}</h3>
@@ -266,22 +319,22 @@ export default function OmProsjektet() {
             </p>
           </div>
 
-          <div className="mt-16 md:mt-24 grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+          <div className="mt-16 md:mt-24 grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 group/gallery">
             {FESTIVALER.map((f, i) => (
               <motion.figure
                 key={f.img}
-                initial={{ opacity: 0, y: 16 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-60px' }}
-                transition={{ duration: 0.55, delay: (i % 3) * 0.06, ease: [0.22, 1, 0.36, 1] }}
-                className="group"
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.65, delay: (i % 3) * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                className="transition-opacity duration-500 group-hover/gallery:opacity-55 hover:!opacity-100"
               >
                 <div className={i % 5 === 0 ? 'aspect-[3/4] overflow-hidden' : 'aspect-[4/3] overflow-hidden'}>
                   <img
                     src={f.img}
                     alt={`${f.name} ${f.year}`}
                     loading="lazy"
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                    className="w-full h-full object-cover transition-transform duration-1000 ease-out hover:scale-[1.04]"
                   />
                 </div>
                 <figcaption className="mt-3 flex items-baseline justify-between font-mono text-[10px] uppercase tracking-[0.2em] text-graphite/55">
@@ -325,7 +378,7 @@ export default function OmProsjektet() {
                   src="/images/drone-DJI_0568.jpg"
                   alt="Lofoten-landskapet sett fra fjellsiden av tomta"
                   loading="lazy"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transition-transform duration-1000 ease-out hover:scale-[1.04]"
                 />
               </figure>
             </aside>

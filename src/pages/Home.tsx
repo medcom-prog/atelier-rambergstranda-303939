@@ -5,6 +5,8 @@ import { HeroCarousel } from '@/components/site/HeroCarousel';
 import { Container } from '@/components/site/Container';
 import { Eyebrow } from '@/components/site/Eyebrow';
 import { Logo } from '@/components/site/Logo';
+import { SplitText } from '@/components/site/SplitText';
+import { Marquee } from '@/components/site/Marquee';
 
 const HERO_SLIDES = [
   {
@@ -71,50 +73,86 @@ export default function Home() {
       <HeroCarousel slides={HERO_SLIDES} />
 
       {/* Manifesto / vertical wordmark anchor under the hero */}
-      <section className="relative bg-paper py-24 md:py-40 lg:py-48">
+      <section className="relative bg-paper py-24 md:py-40 lg:py-48 overflow-hidden">
         <Container size="lg">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16 items-start">
-            <div className="md:col-span-4">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-80px' }}
+              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+              className="md:col-span-4"
+            >
               <Logo size="xl" tone="graphite" className="!text-left" />
-            </div>
+            </motion.div>
             <div className="md:col-span-8 md:pt-4">
               <Eyebrow number="—">Et prosjekt av Galina Manikova</Eyebrow>
               <p className="font-serif text-2xl md:text-3xl lg:text-display-md text-graphite leading-[1.25]">
-                Et kunstsenter på Rambergstranda i Lofoten.
-                Hovedbygg ved sjøen, minihus på fjellsiden,
-                workshops, festivaler og residency på{' '}
-                <em>Norges vakreste strand.</em>
+                <motion.span
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true, margin: '-80px' }}
+                  transition={{ duration: 1.0, delay: 0.15, ease: 'easeOut' }}
+                >
+                  Et kunstsenter på Rambergstranda i Lofoten.
+                  Hovedbygg ved sjøen, minihus på fjellsiden,
+                  workshops, festivaler og residency på{' '}
+                  <em>Norges vakreste strand.</em>
+                </motion.span>
               </p>
               <Link
                 to="/om-prosjektet"
-                className="inline-flex items-center gap-3 mt-12 font-mono text-[11px] uppercase tracking-[0.25em] text-graphite hover:text-prussian transition-colors group"
+                className="inline-flex items-center gap-3 mt-12 font-mono text-[11px] uppercase tracking-[0.25em] text-graphite hover:text-prussian transition-colors group/cta"
               >
                 Les om prosjektet
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1.5" strokeWidth={1.25} />
+                <span className="overflow-hidden inline-block">
+                  <ArrowRight
+                    className="h-4 w-4 transition-transform duration-500 ease-out group-hover/cta:translate-x-1.5"
+                    strokeWidth={1.25}
+                  />
+                </span>
               </Link>
             </div>
           </div>
         </Container>
       </section>
 
+      {/* Marquee strip — slow editorial cluster */}
+      <section className="bg-paper-soft text-graphite border-y border-graphite/10">
+        <Marquee
+          items={['kunnskap', 'kreativitet', 'glede', 'samhold']}
+          duration={42}
+          className="text-graphite"
+        />
+      </section>
+
       {/* Four pillars — image-light, type-led */}
-      <section className="bg-graphite text-paper py-24 md:py-40">
+      <section className="bg-graphite text-paper py-24 md:py-40 overflow-hidden">
         <Container size="xl">
           <Eyebrow tone="paper">Atelier Rambergstranda</Eyebrow>
-          <h2 className="font-serif text-display-md md:text-display-lg max-w-4xl">
-            Kunnskap, kreativitet, glede og samhold.
-          </h2>
+          <div className="max-w-4xl">
+            <SplitText
+              as="h2"
+              unit="word"
+              stagger={0.085}
+              delay={0.1}
+              italic={[3, 4, 5]}
+              className="font-serif text-display-md md:text-display-lg text-paper leading-[1.05]"
+            >
+              {'Kunnskap, kreativitet, glede og samhold.'}
+            </SplitText>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-px mt-16 md:mt-24" style={{ backgroundColor: 'rgba(244,241,236,0.08)' }}>
             {PILLARS.map((p, i) => (
               <motion.div
                 key={p.n}
-                initial={{ opacity: 0, y: 16 }}
+                initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-60px' }}
-                transition={{ duration: 0.55, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                className="bg-graphite p-10 md:p-14 group"
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.7, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                className="bg-graphite p-10 md:p-14 group/pillar"
               >
-                <p className="font-mono text-3xl md:text-4xl text-prussian font-light leading-none">
+                <p className="font-mono text-3xl md:text-4xl text-prussian font-light leading-none transition-colors duration-500 group-hover/pillar:text-paper">
                   {p.n}
                 </p>
                 <h3 className="mt-8 font-serif text-2xl md:text-3xl text-paper">
@@ -125,10 +163,13 @@ export default function Home() {
                 </p>
                 <Link
                   to={p.href}
-                  className="inline-flex items-center gap-2 mt-8 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/55 hover:text-paper transition-colors"
+                  className="inline-flex items-center gap-2 mt-8 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/55 hover:text-paper transition-colors group/link"
                 >
                   Les mer
-                  <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.25} />
+                  <ArrowRight
+                    className="h-3.5 w-3.5 transition-transform duration-500 group-hover/link:translate-x-1"
+                    strokeWidth={1.25}
+                  />
                 </Link>
               </motion.div>
             ))}
@@ -139,17 +180,23 @@ export default function Home() {
       {/* Funder line */}
       <section className="bg-paper py-20 md:py-28">
         <Container size="md">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-10 md:gap-16">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="flex flex-col md:flex-row md:items-center md:justify-between gap-10 md:gap-16"
+          >
             <p className="font-serif text-lg md:text-xl text-graphite/85 italic leading-relaxed max-w-md">
               Et forprosjekt om utvikling av en ny kunstarena på Ramberg har fått støtte fra Norsk Kulturråd.
             </p>
             <img
               src="/images/kulturradet.png"
               alt="Kulturrådet — Arts Council Norway"
-              className="h-16 md:h-20 w-auto opacity-90 invert"
+              className="h-16 md:h-20 w-auto opacity-90"
               loading="lazy"
             />
-          </div>
+          </motion.div>
         </Container>
       </section>
     </>

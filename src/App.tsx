@@ -1,7 +1,9 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import { Nav } from '@/components/site/Nav';
 import { Footer } from '@/components/site/Footer';
+import { ScrollProgress } from '@/components/site/ScrollProgress';
+import { PageTransition } from '@/components/site/PageTransition';
 import Home from '@/pages/Home';
 import OmProsjektet from '@/pages/OmProsjektet';
 import VisueltKonsept from '@/pages/VisueltKonsept';
@@ -9,31 +11,52 @@ import Tomteanalyse from '@/pages/Tomteanalyse';
 import Tidslinje from '@/pages/Tidslinje';
 import Kontakt from '@/pages/Kontakt';
 
-function ScrollToTop() {
-  const { pathname, hash } = useLocation();
-  useEffect(() => {
+/**
+ * Route-change scroll behavior:
+ * - With a hash: smooth-scroll to the target after layout settles.
+ * - Without a hash: snap to top *instantly* (the global smooth-scroll is
+ *   removed in index.css so this is jump-to-top, not animated). Use
+ *   useLayoutEffect so the snap happens before paint and the user never
+ *   sees the previous page's scroll position carry over.
+ */
+function ScrollManager() {
+  const { pathname, hash, key } = useLocation();
+
+  useLayoutEffect(() => {
     if (hash) {
-      // Let the in-page anchor scroll handle itself
-      const id = hash.replace('#', '');
-      const el = document.getElementById(id);
-      if (el) {
-        // Wait one frame for layout
-        requestAnimationFrame(() => {
+      // Defer one frame so the new page has rendered + IDs exist
+      requestAnimationFrame(() => {
+        const id = hash.replace('#', '');
+        const el = document.getElementById(id);
+        if (el) {
           el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
-      }
+        } else {
+          window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+        }
+      });
       return;
     }
-    window.scrollTo(0, 0);
-  }, [pathname, hash]);
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [pathname, hash, key]);
+
+  // Remove any browser-restored scroll position on first paint
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+  }, []);
+
   return null;
 }
 
 function Layout({ children, transparentNav = false }: { children: React.ReactNode; transparentNav?: boolean }) {
   return (
     <div className="bg-paper text-graphite antialiased min-h-screen">
+      <ScrollProgress />
       <Nav variant={transparentNav ? 'transparent' : 'solid'} />
-      <main>{children}</main>
+      <main>
+        <PageTransition>{children}</PageTransition>
+      </main>
       <Footer />
     </div>
   );
@@ -42,7 +65,7 @@ function Layout({ children, transparentNav = false }: { children: React.ReactNod
 export default function App() {
   return (
     <BrowserRouter>
-      <ScrollToTop />
+      <ScrollManager />
       <Routes>
         <Route
           path="/"
